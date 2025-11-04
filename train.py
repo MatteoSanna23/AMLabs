@@ -4,7 +4,7 @@ import torch.optim as optim
 import wandb # Tool for tracking results (as required by Lab 3)
 
 # Import local modules from the project structure
-from models.CustomNet import CustomNet
+from models.customNet import CustomNet
 # Import the loaders directly from the dataset module
 from dataset.tinyimagenet_dataloader import train_loader, val_loader 
 from eval import validate # Import validation logic
