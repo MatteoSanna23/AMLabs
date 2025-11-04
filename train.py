@@ -1,7 +1,7 @@
 import torch
 from torch import nn
 import torch.optim as optim
-import wandb # Tool for tracking results (as required by Lab 3)
+# import wandb # Tool for tracking results (as required by Lab 3) -- commentato
 
 # Import local modules from the project structure
 from models.customNet import CustomNet
@@ -51,12 +51,12 @@ def train(epoch, model, train_loader, criterion, optimizer, device):
     print(f'Train Epoch: {epoch} Loss: {train_loss:.6f} Acc: {train_accuracy:.2f}%')
     
     # Log metrics to Wandb (Lab 3 requirement)
-    if wandb.run:
-        wandb.log({
-            "train_loss": train_loss,
-            "train_accuracy": train_accuracy,
-            "epoch": epoch
-        })
+    # if wandb.run:
+    #     wandb.log({
+    #         "train_loss": train_loss,
+    #         "train_accuracy": train_accuracy,
+    #         "epoch": epoch
+    #     })
 
 
 # --- Main Execution Loop ---
@@ -67,13 +67,13 @@ if __name__ == '__main__':
     print(f"Using device: {device}")
     
     # Initialize Wandb run for result tracking (Lab 3 requirement)
-    wandb.init(project=WANDB_PROJECT_NAME, config={
-        "learning_rate": LEARNING_RATE,
-        "momentum": MOMENTUM,
-        "batch_size": train_loader.batch_size if train_loader else None,
-        "architecture": "CustomNet",
-        "dataset": "TinyImageNet"
-    })
+    # wandb.init(project=WANDB_PROJECT_NAME, config={
+    #     "learning_rate": LEARNING_RATE,
+    #     "momentum": MOMENTUM,
+    #     "batch_size": train_loader.batch_size if train_loader else None,
+    #     "architecture": "CustomNet",
+    #     "dataset": "TinyImageNet"
+    # })
 
     # 2. Model Initialization (Putting everything together)
     model = CustomNet().to(device)
@@ -81,8 +81,8 @@ if __name__ == '__main__':
     optimizer = optim.SGD(model.parameters(), lr=LEARNING_RATE, momentum=MOMENTUM)
 
     # Log model information to Wandb
-    if wandb.run:
-        wandb.watch(model, criterion, log="all", log_freq=10)
+    # if wandb.run:
+    #     wandb.watch(model, criterion, log="all", log_freq=10)
 
 
     best_acc = 0
@@ -100,8 +100,8 @@ if __name__ == '__main__':
             val_accuracy = validate(model, val_loader, criterion) 
             
             # Log validation metrics
-            if wandb.run:
-                 wandb.log({"val_accuracy": val_accuracy, "epoch": epoch})
+            # if wandb.run:
+            #      wandb.log({"val_accuracy": val_accuracy, "epoch": epoch})
 
             # Checkpoint the best model (best practice)
             if val_accuracy > best_acc:
@@ -111,4 +111,4 @@ if __name__ == '__main__':
                 print(f"Model saved to checkpoints/best_customnet.pth with improved accuracy: {best_acc:.2f}%")
 
         print(f'Final Best validation accuracy: {best_acc:.2f}%')
-        wandb.finish()
+        # wandb.finish()
