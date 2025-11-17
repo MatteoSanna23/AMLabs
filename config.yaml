@@ -1,0 +1,8 @@
+# config.yaml
+batch_size: 32
+num_workers: 8
+image_size: 224
+learning_rate: 0.001
+momentum: 0.9
+epochs: 3
+data_root: "tiny-imagenet/tiny-imagenet-200"
