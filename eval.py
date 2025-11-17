@@ -1,3 +1,5 @@
+import torch
+
 # Validation loop
 def validate(model, val_loader, criterion):
     model.eval()
