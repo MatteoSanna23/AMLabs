@@ -1,13 +1,12 @@
 # train.py
-import torch
-from torch import nn, optim
-import yaml
-from models.customNet import CustomNet
-from models.alexNet import AlexNet
-from dataset.tinyimagenet_dataloader import train_loader, val_loader
-from eval import validate
-
 def train_model(cfg):
+    import torch
+    from torch import nn, optim
+    import yaml
+    from models.customNet import CustomNet
+    from models.alexNet import AlexNet
+    from dataset.tinyimagenet_dataloader import train_loader, val_loader
+    from eval import validate
     # --- Device ---
     device = "cuda" if torch.cuda.is_available() and cfg.get("device") != "cpu" else "cpu"
     print(f"Using device: {device}")
