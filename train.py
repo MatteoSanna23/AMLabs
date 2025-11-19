@@ -58,7 +58,7 @@ def train_model(cfg):
             print(f"Epoch {epoch+1}/{epochs} - Loss: {avg_loss:.4f}")
 
             # Validation
-            val_acc = validate(model, val_loader, criterion, device)
+            val_acc = validate(model, val_loader, criterion)
 
             # --- Scrivi accurancy finale in file opzionale ---
             with open("last_val_acc.txt", "w") as f:
