@@ -6,8 +6,17 @@ import yaml
 
 # Import local modules
 from models.customNet import CustomNet
+from models.alexNet import AlexNet
 from dataset.tinyimagenet_dataloader import train_loader, val_loader
 from eval import validate
+
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--model", type=str, default="custom", choices=["custom", "alexnet"])
+parser.add_argument("--config", type=str, default="config_local.yaml")
+args = parser.parse_args()
+
 
 # --- Load configuration ---
 try:
