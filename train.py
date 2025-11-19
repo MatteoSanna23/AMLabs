@@ -13,10 +13,10 @@ def train_model(cfg):
     print(f"Using device: {device}")
 
     # --- Model ---
-    model_name = cfg.get("model", "custom")
-    if model_name == "custom":
+    model_name = cfg.get("model", "CustomNet")
+    if model_name == "CustomNet":
         model = CustomNet().to(device)
-    elif model_name == "alexnet":
+    elif model_name == "AlexNet":
         model = AlexNet(num_classes=200).to(device)
 
     # --- Optimizer ---
