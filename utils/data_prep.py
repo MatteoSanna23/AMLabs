@@ -37,7 +37,11 @@ def reorganize_val_set():
     shutil.rmtree(images_path)
     print("Riorganizzazione del validation set completata.")
 
-if __name__ == '__main__':
-    # Esempio:
-    # download_and_extract_tiny_imagenet()
+def prepare_val_set():
+    """
+    Funzione unica per setup script:
+    - eventualmente scarica dataset
+    - riorganizza la validation set
+    """
+    # download_and_extract_tiny_imagenet()  # opzionale se vuoi gestire tutto in Python
     reorganize_val_set()
