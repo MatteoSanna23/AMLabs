@@ -61,12 +61,9 @@ else:
         # Validation
         val_acc = validate(model, val_loader, criterion, device)
 
-    # --- Scrivi accurancy finale in file opzionale ---
-    with open("last_val_acc.txt", "w") as f:
-        f.write(str(val_acc))
-
-    return val_acc
-
+        # --- Scrivi accurancy finale in file opzionale ---
+        with open("last_val_acc.txt", "w") as f:
+            f.write(str(val_acc))
 
 # Se vuoi eseguire direttamente con python train.py
 if __name__ == "__main__":
