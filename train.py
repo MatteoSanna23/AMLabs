@@ -13,11 +13,22 @@ def train_model(cfg):
     print(f"Using device: {device}")
 
     # --- Model ---
-    model_name = cfg.get("model", "CustomNet")
-    if model_name == "CustomNet":
+    model_name = cfg.get("model", "custom").lower()  # normalizza a minuscolo
+
+    if model_name == "custom":
         model = CustomNet().to(device)
-    elif model_name == "AlexNet":
+    elif model_name == "alexnet":
         model = AlexNet(num_classes=200).to(device)
+    else:
+        raise ValueError(f"Modello '{model_name}' non riconosciuto. Usa 'custom' o 'alexnet'.")
+
+# optimizer
+optimizer_name = cfg.get("optimizer", "adam").lower()
+if optimizer_name == "sgd":
+    optimizer = optim.SGD(model.parameters(), lr=cfg["learning_rate"], momentum=cfg.get("momentum", 0.9))
+else:
+    optimizer = optim.Adam(model.parameters(), lr=cfg["learning_rate"])
+
 
     # --- Optimizer ---
     learning_rate = cfg.get("learning_rate", 0.001)
