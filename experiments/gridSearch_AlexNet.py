@@ -1,39 +1,47 @@
 import yaml
-from copy import deepcopy
-from train import train_model  # Importiamo la funzione direttamente
+from train import train_model
 
-# Parametri di grid search
-learning_rates = [0.1, 0.001, 0.0001]
-batch_sizes = [16, 32, 64]
+def grid_search(cfg):
 
-RESULTS = []
+    # Also here, take the parameters from cfg, otherwise use default values
+    learning_rates = cfg.get("grid_learning_rates", [0.1, 0.001, 0.0001])
+    batch_sizes    = cfg.get("grid_batch_sizes",    [16, 32, 64])
 
-# Carica config originale
-with open("config.yaml") as f:
-    base_cfg = yaml.safe_load(f)
+    RESULTS = []
 
-# Loop grid search
-for lr in learning_rates:
-    for bs in batch_sizes:
-        temp_cfg = deepcopy(base_cfg)
-        temp_cfg["learning_rate"] = lr
-        temp_cfg["batch_size"] = bs
+    for lr in learning_rates:
+        for bs in batch_sizes:
 
-        print(f"--> Lancio train LR={lr} BS={bs}")
-        val_acc = train_model(temp_cfg)  # punto 2: qui ottieni direttamente l'accurancy
+            cfg["learning_rate"] = lr
+            cfg["batch_size"] = bs
 
-        RESULTS.append({
-            "lr": lr,
-            "batch_size": bs,
-            "val_acc": val_acc
-        })
+            # (optional) generate config_local.yaml
+            with open("config_local.yaml", "w") as f:
+                yaml.dump(cfg, f)
 
-        print(f"=== Risultato: LR={lr} BS={bs} -> {val_acc:.2f}% ===")
+            print("\n>> config_local.yaml generated:", cfg)
+            print(f"--> TRAINING LR={lr} BS={bs}")
 
-# Stampa risultati finali
-best = max(RESULTS, key=lambda x: x["val_acc"])
-print("\n=========== RISULTATI FINALI ===========\n")
-for r in RESULTS:
-    print(r)
-print("\n>>> MIGLIORE CONFIG <<<")
-print(best)
+            # Train
+            val_acc = train_model(cfg)
+
+            # Save results
+            RESULTS.append({
+                "lr": lr,
+                "batch_size": bs,
+                "val_acc": val_acc
+            })
+
+            print(f"=== Result: LR={lr} BS={bs} -> {val_acc:.2f}% ===")
+
+    # Best result
+    best = max(RESULTS, key=lambda x: x["val_acc"])
+
+    print("\n=========== FINAL RESULTS ===========")
+    for r in RESULTS:
+        print(r)
+
+    print("\n>>> BEST CONFIG <<<")
+    print(best)
+
+    return best

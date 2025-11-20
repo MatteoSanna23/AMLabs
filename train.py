@@ -12,60 +12,53 @@ def train_model(cfg):
     print(f"Using device: {device}")
 
     # --- Model ---
-    model_name = cfg.get("model", "custom").lower()  # normalizza a minuscolo
+    model_name = cfg.get("model", "customnet").lower()  # normalizza a minuscolo
 
-    if model_name == "custom":
+    if model_name == "customnet":
         model = CustomNet().to(device)
     elif model_name == "alexnet":
         model = AlexNet(num_classes=200).to(device)
     else:
-        raise ValueError(f"Modello '{model_name}' non riconosciuto. Usa 'custom' o 'alexnet'.")
+        raise ValueError(f"Model '{model_name}' not recognized. Use 'customnet' or 'alexnet'.")
 
-    # optimizer
+    # --- Optimizer ---
     optimizer_name = cfg.get("optimizer", "adam").lower()
     if optimizer_name == "sgd":
         optimizer = optim.SGD(model.parameters(), lr=cfg["learning_rate"], momentum=cfg.get("momentum", 0.9))
     else:
         optimizer = optim.Adam(model.parameters(), lr=cfg["learning_rate"])
 
+    # --- Loss Function and Epochs ---
+    criterion = nn.CrossEntropyLoss()
+    epochs = cfg.get("epochs", 5)
 
-        # --- Optimizer ---
-        learning_rate = cfg.get("learning_rate", 0.001)
-        optimizer_name = cfg.get("optimizer", "adam").lower()
-        if optimizer_name == "sgd":
-            optimizer = optim.SGD(model.parameters(), lr=learning_rate, momentum=0.9)
-        else:
-            optimizer = optim.Adam(model.parameters(), lr=learning_rate)
+    # --- Training loop ---
+    for epoch in range(epochs):
+        model.train()
+        total_loss = 0
+        for images, labels in train_loader:
+            images, labels = images.to(device), labels.to(device)   # Move to device
 
-        criterion = nn.CrossEntropyLoss()
-        epochs = cfg.get("epochs", 5)
+            optimizer.zero_grad()   # Zero the parameter gradients
+            outputs = model(images) # Pass the inputs through the model
+            loss = criterion(outputs, labels) # Compute the loss
+            loss.backward()  # Backpropagation
+            optimizer.step()  # Update weights
+            total_loss += loss.item() # Accumulate loss, loss.item() gives the scalar value
 
-        # --- Training loop ---
-        for epoch in range(epochs):
-            model.train()
-            total_loss = 0
-            for images, labels in train_loader:
-                images, labels = images.to(device), labels.to(device)
+        avg_loss = total_loss / len(train_loader)
+        print(f"Epoch {epoch+1}/{epochs} - Loss: {avg_loss:.4f}")
 
-                optimizer.zero_grad()
-                outputs = model(images)
-                loss = criterion(outputs, labels)
-                loss.backward()
-                optimizer.step()
-                total_loss += loss.item()
+        # Validation
+        val_acc = validate(model, val_loader, criterion)
 
-            avg_loss = total_loss / len(train_loader)
-            print(f"Epoch {epoch+1}/{epochs} - Loss: {avg_loss:.4f}")
+        # Write Validation Accuracy
+        with open("last_val_acc.txt", "w") as f:
+            f.write(str(val_acc))
 
-            # Validation
-            val_acc = validate(model, val_loader, criterion)
-
-            # --- Scrivi accurancy finale in file opzionale ---
-            with open("last_val_acc.txt", "w") as f:
-                f.write(str(val_acc))
-
-# Se vuoi eseguire direttamente con python train.py
+# This part allows the script to be run directly
 if __name__ == "__main__":
+    # Command line argument parsing for config file
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", type=str, default="config_local.yaml")

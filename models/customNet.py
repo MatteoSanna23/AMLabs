@@ -32,4 +32,4 @@ class CustomNet(nn.Module):
     def forward(self, x):
         x = self.features(x)
         logits = self.classifier(x)
-        return logits   # in logits we have the raw scores for each class
+        return logits   # in logits we have the raw scores for each class)

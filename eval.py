@@ -12,13 +12,14 @@ def validate(model, val_loader, criterion):
             inputs, targets = inputs.cuda(), targets.cuda()
 
             # todo...
-            # Calcolo dell'output e della loss
+            # Compute outputs and loss
             outputs = model(inputs)
-            loss = criterion(outputs, targets)
-            # ......
+            loss = criterion(outputs, targets) # Compute loss
 
             val_loss += loss.item()
-            _, predicted = outputs.max(1)
+            # now we have to take the predictions selecting the class with max score
+            # example : outputs = we have all the scores for each class and we take the max
+            _, predicted = outputs.max(1) # Get predictions because max returns (values, indices of classes)
             total += targets.size(0)
             correct += predicted.eq(targets).sum().item()
 
