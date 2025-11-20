@@ -55,6 +55,7 @@ def train_model(cfg):
         # Write Validation Accuracy
         with open("last_val_acc.txt", "w") as f:
             f.write(str(val_acc))
+    return val_acc
 
 # This part allows the script to be run directly
 if __name__ == "__main__":
