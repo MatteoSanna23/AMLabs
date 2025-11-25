@@ -1,5 +1,7 @@
 import yaml
 from train import train_model
+import gc
+import torch
 
 def grid_search(cfg):
 
@@ -12,19 +14,19 @@ def grid_search(cfg):
     for lr in learning_rates:
         for bs in batch_sizes:
 
-            cfg["learning_rate"] = lr
-            cfg["batch_size"] = bs
+            # Work in a shallow copy of cfg
+            run_cfg = dict(cfg)
+            run_cfg["learning_rate"] = lr
+            run_cfg["batch_size"] = bs
 
             # (optional) generate config_local.yaml
             with open("config_local.yaml", "w") as f:
-                yaml.dump(cfg, f)
+                yaml.dump(run_cfg, f)
 
-            print("\n>> config_local.yaml generated:", cfg)
             print(f"--> TRAINING LR={lr} BS={bs}")
 
             # Train
-            val_acc = train_model(cfg)
-
+            val_acc = train_model(run_cfg)
             # Save results
             RESULTS.append({
                 "lr": lr,
@@ -33,6 +35,11 @@ def grid_search(cfg):
             })
 
             print(f"=== Result: LR={lr} BS={bs} -> {val_acc:.2f}% ===")
+            
+            del run_cfg
+            gc.collect()
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
 
     # Best result
     best = max(RESULTS, key=lambda x: x["val_acc"])
