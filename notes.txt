@@ -1,0 +1,102 @@
+
+>> Caricamento config per Grid Search...
+>> Modello per grid search: alexnet
+>> Avvio Grid Search...
+--> TRAINING LR=0.1 BS=16
+Using device: cuda
+Found 100000 training images.
+Found 10000 validation images.
+Train loader batches: 6250 and Val loader batches: 625
+Epoch 1/1 - Loss: 39066902147.2858
+Validation Loss: 5.786474 Acc: 0.00%
+>>> Saved BEST checkpoint (acc=0.00)
+=== Result: LR=0.1 BS=16 -> 0.00% ===
+--> TRAINING LR=0.1 BS=32
+Using device: cuda
+Found 100000 training images.
+Found 10000 validation images.
+Train loader batches: 3125 and Val loader batches: 313
+Epoch 1/1 - Loss: 85521063589.9126
+Validation Loss: 5.255833 Acc: 0.00%
+>>> Saved BEST checkpoint (acc=0.00)
+=== Result: LR=0.1 BS=32 -> 0.00% ===
+--> TRAINING LR=0.1 BS=64
+Using device: cuda
+Found 100000 training images.
+Found 10000 validation images.
+Train loader batches: 1563 and Val loader batches: 157
+Epoch 1/1 - Loss: 139117453542.3219
+Validation Loss: 5.053880 Acc: 0.00%
+>>> Saved BEST checkpoint (acc=0.00)
+=== Result: LR=0.1 BS=64 -> 0.00% ===
+--> TRAINING LR=0.001 BS=16
+Using device: cuda
+Found 100000 training images.
+Found 10000 validation images.
+Train loader batches: 6250 and Val loader batches: 625
+Epoch 1/1 - Loss: 5.3003
+Validation Loss: 5.326615 Acc: 0.00%
+>>> Saved BEST checkpoint (acc=0.00)
+=== Result: LR=0.001 BS=16 -> 0.00% ===
+--> TRAINING LR=0.001 BS=32
+Using device: cuda
+Found 100000 training images.
+Found 10000 validation images.
+Train loader batches: 3125 and Val loader batches: 313
+Epoch 1/1 - Loss: 5.3003
+Validation Loss: 5.297763 Acc: 0.00%
+>>> Saved BEST checkpoint (acc=0.00)
+=== Result: LR=0.001 BS=32 -> 0.00% ===
+--> TRAINING LR=0.001 BS=64
+Using device: cuda
+Found 100000 training images.
+Found 10000 validation images.
+Train loader batches: 1563 and Val loader batches: 157
+Epoch 1/1 - Loss: 5.3030
+Validation Loss: 5.312254 Acc: 0.00%
+>>> Saved BEST checkpoint (acc=0.00)
+=== Result: LR=0.001 BS=64 -> 0.00% ===
+--> TRAINING LR=0.0001 BS=16
+Using device: cuda
+Found 100000 training images.
+Found 10000 validation images.
+Train loader batches: 6250 and Val loader batches: 625
+Epoch 1/1 - Loss: 4.7626
+Validation Loss: 8.459237 Acc: 0.93%
+>>> Saved BEST checkpoint (acc=0.93)
+=== Result: LR=0.0001 BS=16 -> 0.93% ===
+--> TRAINING LR=0.0001 BS=32
+Using device: cuda
+Found 100000 training images.
+Found 10000 validation images.
+Train loader batches: 3125 and Val loader batches: 313
+Epoch 1/1 - Loss: 4.7538
+Validation Loss: 8.590102 Acc: 1.21%
+>>> Saved BEST checkpoint (acc=1.21)
+=== Result: LR=0.0001 BS=32 -> 1.21% ===
+--> TRAINING LR=0.0001 BS=64
+Using device: cuda
+Found 100000 training images.
+Found 10000 validation images.
+Train loader batches: 1563 and Val loader batches: 157
+Epoch 1/1 - Loss: 4.7458
+Validation Loss: 9.224572 Acc: 0.73%
+>>> Saved BEST checkpoint (acc=0.73)
+=== Result: LR=0.0001 BS=64 -> 0.73% ===
+
+=========== FINAL RESULTS ===========
+{'lr': 0.1, 'batch_size': 16, 'val_acc': 0.0}
+{'lr': 0.1, 'batch_size': 32, 'val_acc': 0.0}
+{'lr': 0.1, 'batch_size': 64, 'val_acc': 0.0}
+{'lr': 0.001, 'batch_size': 16, 'val_acc': 0.0}
+{'lr': 0.001, 'batch_size': 32, 'val_acc': 0.0}
+{'lr': 0.001, 'batch_size': 64, 'val_acc': 0.0}
+{'lr': 0.0001, 'batch_size': 16, 'val_acc': 0.93}
+{'lr': 0.0001, 'batch_size': 32, 'val_acc': 1.21}
+{'lr': 0.0001, 'batch_size': 64, 'val_acc': 0.73}
+
+>>> BEST CONFIG <<<
+{'lr': 0.0001, 'batch_size': 32, 'val_acc': 1.21}
+
+>> MIGLIOR RISULTATO GRID SEARCH:
+{'lr': 0.0001, 'batch_size': 32, 'val_acc': 1.21}

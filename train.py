@@ -34,7 +34,7 @@ def train_model(cfg):
 
     # --- Loss Function and Epochs ---
     criterion = nn.CrossEntropyLoss()
-    epochs = cfg.get("epochs", 5)
+    epochs = cfg.get("epochs", 2)
     checkpoint_dir = os.path.join(os.getcwd(), "checkpoints")
     os.makedirs(checkpoint_dir, exist_ok=True)
     best_acc = -float("inf")
@@ -55,38 +55,32 @@ def train_model(cfg):
 
             total_loss += loss.item()
 
-        avg_loss = total_loss / num_batches
+        avg_loss = total_loss / max(1, len(train_loader))
         print(f"Epoch {epoch+1}/{epochs} - Loss: {avg_loss:.4f}")
 
-        # Validation
-        val_acc = validate(model, val_loader, criterion)
+        # --- Validation ---
+        val_acc = validate(model, val_loader, criterion, device)
 
-        # ---- SAVE LAST CHECKPOINT ----
-        last_ckpt_path = os.path.join(checkpoint_dir, "last.pth")
+        # ---- Save last checkpoint ----
         torch.save({
             "epoch": epoch,
             "model_state": model.state_dict(),
             "optimizer_state": optimizer.state_dict(),
             "val_acc": val_acc
-        }, last_ckpt_path)
-
-        # write last val acc to file for easy retrieval
-        with open(os.path.join(checkpoint_dir, "last_val_acc.txt"), "w") as f:
-            f.write(str(val_acc))
+        }, os.path.join(checkpoint_dir, "last.pth"))
 
         # ---- SAVE BEST CHECKPOINT ----
         if val_acc > best_acc:
             best_acc = val_acc
-            best_ckpt_path = os.path.join(checkpoint_dir, "best.pth")
             torch.save({
                 "epoch": epoch,
                 "model_state": model.state_dict(),
                 "optimizer_state": optimizer.state_dict(),
                 "val_acc": val_acc
-            }, best_ckpt_path)
-            print(f">>> Saved BEST checkpoint (acc={val_acc:.2f})")
+            }, os.path.join(checkpoint_dir, "best.pth"))
+            print(f">>> NEW BEST checkpoint (acc={val_acc:.2f})")
 
-    return val_acc
+    return best_acc
 
 
 # This part allows the script to be run directly

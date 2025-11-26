@@ -13,17 +13,16 @@ def grid_search(cfg):
 
     for lr in learning_rates:
         for bs in batch_sizes:
+            
+            print(f"\n--> TRAINING LR={lr} | BS={bs}")
 
             # Work in a shallow copy of cfg
             run_cfg = dict(cfg)
             run_cfg["learning_rate"] = lr
             run_cfg["batch_size"] = bs
+            run_cfg["model"] = "alexnet"
+            run_cfg["epochs"] = cfg.get("epochs", 1)
 
-            # (optional) generate config_local.yaml
-            with open("config_local.yaml", "w") as f:
-                yaml.dump(run_cfg, f)
-
-            print(f"--> TRAINING LR={lr} BS={bs}")
 
             # Train
             val_acc = train_model(run_cfg)
