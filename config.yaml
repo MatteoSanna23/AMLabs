@@ -7,3 +7,4 @@ epochs: 3
 learning_rate: 0.001
 momentum: 0.9
 device: "cuda"  # Options: "cuda" or "cpu"
+subset_ratio: 1  # Use 10% of training data for faster testing

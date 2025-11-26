@@ -2,6 +2,8 @@ import os
 import torch.utils.data as data
 from torchvision.datasets import ImageFolder
 import torchvision.transforms as T
+from torch.utils.data import Subset
+import numpy as np
 
 def get_tiny_imagenet_loaders(cfg):
     """
@@ -12,6 +14,7 @@ def get_tiny_imagenet_loaders(cfg):
     DATA_ROOT = cfg["data_root"]
     BATCH_SIZE = cfg["batch_size"]
     NUM_WORKERS = cfg["num_workers"]
+    SUB_RATIO = cfg.get("subset_ratio", 1.0)
 
     # --- Transforms ---
     transform = T.Compose([
@@ -34,6 +37,15 @@ def get_tiny_imagenet_loaders(cfg):
 
     print(f"Found {len(train_dataset)} training images.")
     print(f"Found {len(val_dataset)} validation images.")
+    
+    # --- OPTIONAL: USE ONLY A SUBSET OF THE TRAINING SET FOR FASTER TESTING ---
+    
+    if SUB_RATIO < 1.0:
+        n = len(train_dataset)
+        k = int(n * SUB_RATIO)
+        indices = np.random.choice(n, k, replace=False)
+        train_dataset = Subset(train_dataset, indices)
+        print(f"[DATA] Using subset: {k}/{n} ({SUB_RATIO*100:.1f}%)")
 
     # --- Loaders ---
     train_loader = data.DataLoader(
